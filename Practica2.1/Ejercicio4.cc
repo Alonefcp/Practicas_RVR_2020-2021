@@ -31,7 +31,7 @@ int main(int argc ,char *argv[])
     int sd = socket(res->ai_family, res->ai_socktype, 0);
     if(sd==-1)
     {
-        std::cerr<<"[socket] creacion de socket"<<std::endl;
+        std::cout << "[socket]: " << strerror(errno) << std::endl;
         return -1;
     }
 
@@ -59,23 +59,22 @@ int main(int argc ,char *argv[])
         int bytes = recv(cliente_sd, (void*) buffer, TAMBUFFER-1, 0);
         if(bytes <=0)
         {
-
-            std::cout<<"FIN DE LA CONEXION"<<std::endl;
+            std::cout << "FIN DE LA CONEXION" << std::endl;
             break;
         }
 
         buffer[bytes]= '\0';
 
-        std::cout<<"\tData: "<< buffer;
+        //std::cout<<"\tData: "<< buffer;
 
         int s = send(cliente_sd, buffer, bytes, 0);   
         if(s==-1)
         {
-            std::cout<<"[sendto]: Error enviando mensajes\n";
+            std::cout << "[send]: " << strerror(errno) << std::endl;
+            close(sd);
+            close(cliente_sd);
             return -1;
-        }  
-
-           
+        }            
     }
 
     close(sd);

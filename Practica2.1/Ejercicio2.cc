@@ -32,6 +32,7 @@ int main(int argc ,char *argv[])
     if(sd==-1)
     {
         std::cerr<<"[socket] creacion de socket"<<std::endl;
+        close(sd);
         return -1;
     }
 
@@ -54,6 +55,7 @@ int main(int argc ,char *argv[])
         if(bytes==-1)
         {
             std::cerr<<"[recvfrom]:Error recieving messages"<<std::endl;
+            close(sd);
             return -1;
         }
 
@@ -65,25 +67,27 @@ int main(int argc ,char *argv[])
         time (&rawtime);
         timeinfo = localtime (&rawtime);
 
-        if(std::tolower(buffer[0])=='t')
+        if(strcmp(buffer,"t")==0)
         {
             int tam = strftime(buffer,TAMBUFFER-1,"%T",timeinfo) + 1;
             sendto(sd, buffer, tam, 0, &cliente, cliente_len);
         } 
-        else if(std::tolower(buffer[0])=='d')
+        else if(strcmp(buffer,"d")==0)
         {
             int tam = strftime(buffer,TAMBUFFER-1,"%D",timeinfo) + 1;
             sendto(sd, buffer, tam, 0, &cliente, cliente_len);
         }
-        else if(buffer[0]=='q')
+        else if(strcmp(buffer,"q")==0)
         {
             std::cout<< "Saliendo... " << std::endl;
             break;
         } 
         else
         {
-            std::cout<< "Comando no soportado: " << buffer[0] << std::endl;
+            std::cout<< "Comando no soportado: " << buffer << std::endl;
             std::cout<< "Comandos soportados: t, d, q" << std::endl;
+            std::cout<< "Saliendo... " << std::endl;
+            break;
         }
            
     }
