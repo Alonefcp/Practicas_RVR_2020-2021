@@ -12,9 +12,8 @@ int main(int argc ,char *argv[])
 
     memset((void*) &hints, 0, sizeof(struct addrinfo));
     hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM;
 
-    int rc = getaddrinfo(argv[1], argv[2], &hints, &res);
+    int rc = getaddrinfo(argv[1], NULL, &hints, &res);
 
     if(rc!=0)
     {
@@ -28,11 +27,8 @@ int main(int argc ,char *argv[])
         char host[NI_MAXHOST];
         char serv[NI_MAXSERV];
 
-        getnameinfo(i->ai_addr, i->ai_addrlen, host, NI_MAXHOST, serv, NI_MAXSERV,
-                        NI_NUMERICHOST | NI_NUMERICSERV);
-                       
-        std::cout << "Host: " << host << " Port: " << serv << std::endl;              
-                      
+        getnameinfo(i->ai_addr, i->ai_addrlen, host, NI_MAXHOST, serv, NI_MAXSERV, NI_NUMERICHOST);                                            
+        std::cout << host << " " << i->ai_family << " " << i->ai_socktype << std::endl;                                   
     }
 
     freeaddrinfo(res);
