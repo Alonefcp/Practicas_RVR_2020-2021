@@ -32,7 +32,6 @@ int main(int argc ,char *argv[])
         return -1;
     }
 
-    freeaddrinfo(res);
   
     int s = sendto(sd, argv[3], strlen(argv[3])+1, 0, res->ai_addr, res->ai_addrlen);
     if(s==-1)
@@ -54,6 +53,7 @@ int main(int argc ,char *argv[])
      
     std::cout << buffer << std::endl;
 
+    freeaddrinfo(res);
     close(sd);
 
     return 0;

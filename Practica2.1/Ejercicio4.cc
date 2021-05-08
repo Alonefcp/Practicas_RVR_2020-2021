@@ -18,7 +18,6 @@ int main(int argc ,char *argv[])
     hints.ai_family   = AF_INET; 
     hints.ai_socktype = SOCK_STREAM;
 
-
     int rc = getaddrinfo(argv[1], argv[2], &hints, &res);
 
     if(rc!=0)
@@ -57,15 +56,14 @@ int main(int argc ,char *argv[])
         char buffer[TAMBUFFER];
 
         int bytes = recv(cliente_sd, (void*) buffer, TAMBUFFER-1, 0);
+        buffer[bytes]= '\0';
         if(bytes <=0)
         {
             std::cout << "FIN DE LA CONEXION" << std::endl;
             break;
         }
 
-        buffer[bytes]= '\0';
-
-        //std::cout<<"\tData: "<< buffer;
+        //std::cout << "Data: " << buffer<<std::endl;
 
         int s = send(cliente_sd, buffer, bytes, 0);   
         if(s==-1)

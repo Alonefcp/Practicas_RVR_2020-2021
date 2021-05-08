@@ -67,17 +67,17 @@ int main(int argc ,char *argv[])
         time (&rawtime);
         timeinfo = localtime (&rawtime);
 
-        if(strcmp(buffer,"t")==0)
+        if(strcmp(buffer,"t")==0 || strcmp(buffer,"t\n")==0)
         {
-            int tam = strftime(buffer,TAMBUFFER-1,"%T",timeinfo) + 1;
+            int tam = strftime(buffer,TAMBUFFER-1,"%r",timeinfo) + 1;
             sendto(sd, buffer, tam, 0, &cliente, cliente_len);
         } 
-        else if(strcmp(buffer,"d")==0)
+        else if(strcmp(buffer,"d")==0 || strcmp(buffer,"d\n")==0)
         {
             int tam = strftime(buffer,TAMBUFFER-1,"%D",timeinfo) + 1;
             sendto(sd, buffer, tam, 0, &cliente, cliente_len);
         }
-        else if(strcmp(buffer,"q")==0)
+        else if(strcmp(buffer,"q")==0 || strcmp(buffer,"q\n")==0)
         {
             std::cout<< "Saliendo... " << std::endl;
             break;

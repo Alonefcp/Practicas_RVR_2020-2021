@@ -27,8 +27,11 @@ int main(int argc ,char *argv[])
         char host[NI_MAXHOST];
         char serv[NI_MAXSERV];
 
-        getnameinfo(i->ai_addr, i->ai_addrlen, host, NI_MAXHOST, serv, NI_MAXSERV, NI_NUMERICHOST);                                            
-        std::cout << host << " " << i->ai_family << " " << i->ai_socktype << std::endl;                                   
+        getnameinfo(i->ai_addr, i->ai_addrlen, host, NI_MAXHOST, serv, NI_MAXSERV, NI_NUMERICHOST);
+                        
+                       
+        std::cout << host << " " << i->ai_family << " " << i->ai_socktype << std::endl;              
+                      
     }
 
     freeaddrinfo(res);
