@@ -54,7 +54,7 @@ int main(int argc ,char *argv[])
 
         if(bytes==-1)
         {
-            std::cerr<<"[recvfrom]:Error recieving messages"<<std::endl;
+            std::cerr<<"[recvfrom]: " << strerror(errno) << std::endl;
             close(sd);
             return -1;
         }
@@ -70,12 +70,22 @@ int main(int argc ,char *argv[])
         if(strcmp(buffer,"t")==0 || strcmp(buffer,"t\n")==0)
         {
             int tam = strftime(buffer,TAMBUFFER-1,"%r",timeinfo) + 1;
-            sendto(sd, buffer, tam, 0, &cliente, cliente_len);
+            int s = sendto(sd, buffer, tam, 0, &cliente, cliente_len);
+            if(s==-1)
+            {
+                std::cout<<"[sendto]: " << strerror(errno) << std::endl;
+                return -1;
+            }
         } 
         else if(strcmp(buffer,"d")==0 || strcmp(buffer,"d\n")==0)
         {
             int tam = strftime(buffer,TAMBUFFER-1,"%D",timeinfo) + 1;
-            sendto(sd, buffer, tam, 0, &cliente, cliente_len);
+            int s = sendto(sd, buffer, tam, 0, &cliente, cliente_len);
+            if(s==-1)
+            {
+                std::cout<<"[sendto]: " << strerror(errno) << std::endl;
+                return -1;
+            }
         }
         else if(strcmp(buffer,"q")==0 || strcmp(buffer,"q\n")==0)
         {

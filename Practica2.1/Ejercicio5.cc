@@ -44,12 +44,10 @@ int main(int argc ,char *argv[])
    
     freeaddrinfo(res);
 
-    //char* buffer = new char[TAMBUFFER];
-
     while (true)
     {
         char buffer[TAMBUFFER];
-        //std::cin >> buffer;       
+              
         std::cin.getline(buffer,TAMBUFFER);
 
         if(strcmp(buffer,"Q") == 0 || strcmp(buffer,"Q\n") == 0) break; //El cliente cierra el servidor
@@ -58,7 +56,6 @@ int main(int argc ,char *argv[])
         if(s==-1)
         {
             std::cout << strerror(errno) << std::endl;
-            //delete buffer;
             close(sd);
             return -1;
         }
@@ -69,7 +66,6 @@ int main(int argc ,char *argv[])
         if(bytes==-1)
         {
             std::cout << strerror(errno) << std::endl;
-            //delete buffer;
             close(sd);
             return -1;
         }
@@ -78,7 +74,6 @@ int main(int argc ,char *argv[])
     
     }
  
-    //delete buffer;
     close(sd);
 
     return 0;

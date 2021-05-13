@@ -92,6 +92,14 @@ int main(int argc ,char *argv[])
 
         int cliente_sd = accept(sd,&cliente,&cliente_len);
 
+        if(cliente_sd==-1)
+        {
+            std::cout << "[accept]: " << strerror(errno) << std::endl;
+
+            close(cliente_sd);
+            return -1;
+        }
+
         char host[NI_MAXHOST];
         char serv[NI_MAXSERV];
 
