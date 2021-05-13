@@ -71,7 +71,7 @@ int main(int argc ,char *argv[])
         return -1;
     }  
 
-    
+    //Creacion del socket
     int sd = socket(res->ai_family, res->ai_socktype, 0);
     if(sd==-1)
     {
@@ -79,17 +79,21 @@ int main(int argc ,char *argv[])
         return -1;
     }
 
+    //Bind
     bind(sd, res->ai_addr, res->ai_addrlen);
 
     freeaddrinfo(res);
 
+    //Espera aceptar conexiones
     listen(sd,16);
 
+    //Bucle ppal del servidor
     while(true)
     {
         struct sockaddr cliente;
         socklen_t cliente_len = sizeof(struct sockaddr);
 
+        //Creacion del socket del cliente
         int cliente_sd = accept(sd,&cliente,&cliente_len);
 
         if(cliente_sd==-1)
@@ -103,11 +107,14 @@ int main(int argc ,char *argv[])
         char host[NI_MAXHOST];
         char serv[NI_MAXSERV];
 
+        //Informacion del host y direccion del cliente
         getnameinfo(&cliente, cliente_len, host, NI_MAXHOST,serv, NI_MAXSERV, NI_NUMERICHOST|NI_NUMERICSERV);
         std::cout << "Host: " << host << ", Port: " << serv << std::endl; 
 
+        //Creo el objeto que trata las conexiones
         ConexionThread* ct = new ConexionThread(cliente_sd);
 
+        //Creo del thread
         std::thread([&ct](){
            
             ct->haz_conexion();

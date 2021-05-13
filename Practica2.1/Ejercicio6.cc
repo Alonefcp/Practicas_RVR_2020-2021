@@ -113,7 +113,7 @@ int main(int argc ,char *argv[])
         return -1;
     }  
 
-    
+    //Creacion del socket
     int sd = socket(res->ai_family, res->ai_socktype, 0);
     if(sd==-1)
     {
@@ -122,15 +122,18 @@ int main(int argc ,char *argv[])
         return -1;
     }
 
+    //Bind
     bind(sd, res->ai_addr, res->ai_addrlen);
 
     freeaddrinfo(res);
     
+    //Se crean n threads
     for(int i=0;i<MAX_THREAD;i++)
     {      
-        
+        //Creo el objeto que trata los mensajes
         MesnsajeThread* mt = new MesnsajeThread(sd);
     
+        //Creo el thread
         std::thread([&mt](){
                       
             mt->haz_mensaje();
@@ -140,7 +143,7 @@ int main(int argc ,char *argv[])
         
     }
     
-    //Al pulsar la q el thread principal cierra el resto
+    //Al pulsar la q el thread principal cierra el resto de threads
     char salir = ' ';
     while (salir!='q')
     {

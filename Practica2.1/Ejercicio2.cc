@@ -27,7 +27,7 @@ int main(int argc ,char *argv[])
         return -1;
     }  
 
-    
+    //Creacion del socket
     int sd = socket(res->ai_family, res->ai_socktype, 0);
     if(sd==-1)
     {
@@ -36,10 +36,12 @@ int main(int argc ,char *argv[])
         return -1;
     }
 
+    //Bind 
     bind(sd, res->ai_addr, res->ai_addrlen);
 
     freeaddrinfo(res);
 
+    //Bucle ppal del servidor
     while(true)
     {
         char buffer[TAMBUFFER];
@@ -49,6 +51,7 @@ int main(int argc ,char *argv[])
         struct sockaddr cliente;
         socklen_t cliente_len = sizeof(struct sockaddr);
         
+        //Recibo datos del cliente
         int bytes = recvfrom(sd, (void*) buffer, TAMBUFFER-1, 0, &cliente, &cliente_len);
         buffer[bytes]= '\0';
 
@@ -59,6 +62,7 @@ int main(int argc ,char *argv[])
             return -1;
         }
 
+        //Informacion del host y de la direccion del cliente
         getnameinfo(&cliente, cliente_len, host, NI_MAXHOST,serv, NI_MAXSERV, NI_NUMERICHOST|NI_NUMERICSERV);
         std::cout << "Host: " << host << ", Port: " << serv << std::endl; 
 
@@ -67,6 +71,7 @@ int main(int argc ,char *argv[])
         time (&rawtime);
         timeinfo = localtime (&rawtime);
 
+        //Hago la accion correspondiente en funcion de los datos del cliente y se lo envio
         if(strcmp(buffer,"t")==0 || strcmp(buffer,"t\n")==0)
         {
             int tam = strftime(buffer,TAMBUFFER-1,"%r",timeinfo) + 1;

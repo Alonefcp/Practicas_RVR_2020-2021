@@ -22,6 +22,7 @@ int main(int argc ,char *argv[])
         return -1;
     }  
 
+    //Muestro, el host, la familia y el tipo de socket de las posibles conexiones
     for(i = res; i != NULL; i = i->ai_next)
     {
         char host[NI_MAXHOST];

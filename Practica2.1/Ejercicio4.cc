@@ -26,7 +26,7 @@ int main(int argc ,char *argv[])
         return -1;
     }  
 
-    
+    //Creacion del socket
     int sd = socket(res->ai_family, res->ai_socktype, 0);
     if(sd==-1)
     {
@@ -34,27 +34,33 @@ int main(int argc ,char *argv[])
         return -1;
     }
 
+    //Bind
     bind(sd, res->ai_addr, res->ai_addrlen);
 
     freeaddrinfo(res);
 
+    //Espera aceptar conexiones
     listen(sd,16);
 
     struct sockaddr cliente;
     socklen_t cliente_len = sizeof(struct sockaddr);
 
+    //Creacion del socket del cliente
     int cliente_sd = accept(sd,&cliente,&cliente_len);
 
     char host[NI_MAXHOST];
     char serv[NI_MAXSERV];
 
+    //Informacion del host y direccion del cliente
     getnameinfo(&cliente, cliente_len, host, NI_MAXHOST,serv, NI_MAXSERV, NI_NUMERICHOST|NI_NUMERICSERV);
     std::cout << "Host: " << host << ", Port: " << serv << std::endl; 
 
+    //Bucle ppal del servidor
     while(true)
     {
         char buffer[TAMBUFFER];
 
+        //Recibo datos del cliente
         int bytes = recv(cliente_sd, (void*) buffer, TAMBUFFER-1, 0);
         buffer[bytes]= '\0';
         if(bytes <=0)
@@ -65,6 +71,7 @@ int main(int argc ,char *argv[])
 
         //std::cout << "Data: " << buffer<<std::endl;
 
+        //Envio datos al cliente
         int s = send(cliente_sd, buffer, bytes, 0);   
         if(s==-1)
         {

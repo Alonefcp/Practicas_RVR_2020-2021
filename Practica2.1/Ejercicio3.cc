@@ -25,6 +25,7 @@ int main(int argc ,char *argv[])
         return -1;
     }    
 
+    //Creacion de socket
     int sd = socket(res->ai_family, res->ai_socktype, 0);
     if(sd==-1)
     {
@@ -32,7 +33,7 @@ int main(int argc ,char *argv[])
         return -1;
     }
 
-  
+    //Envio datos al servidor
     int s = sendto(sd, argv[3], strlen(argv[3])+1, 0, res->ai_addr, res->ai_addrlen);
     if(s==-1)
     {
@@ -40,7 +41,7 @@ int main(int argc ,char *argv[])
         return -1;
     }
     
-    
+    //Recibo datos del servidor
     char buffer[TAMBUFFER];
     int bytes = recvfrom(sd, (void*) buffer, TAMBUFFER, 0, res->ai_addr, &res->ai_addrlen);
     buffer[bytes]= '\0';
