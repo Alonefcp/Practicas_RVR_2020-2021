@@ -54,6 +54,7 @@ private:
 };
 
 
+
 int main(int argc ,char *argv[])
 {
     struct addrinfo hints;
@@ -114,13 +115,9 @@ int main(int argc ,char *argv[])
         ConexionThread* ct = new ConexionThread(cliente_sd);
 
         //Creo del thread
-        std::thread([&ct](){
-           
-            ct->haz_conexion();
-                       
-            delete ct;
+        std::thread(&ConexionThread::haz_conexion, *ct).detach();
 
-        }).detach();   
+        delete ct;     
     }
 
     close(sd);
