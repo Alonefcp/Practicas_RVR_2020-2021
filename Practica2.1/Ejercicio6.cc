@@ -31,22 +31,24 @@ public:
             struct sockaddr cliente;
             socklen_t cliente_len = sizeof(struct sockaddr);
         
+            //Recibo datos del cliente
             int bytes = recvfrom(sd, (void*) buffer, TAMBUFFER-1, 0, &cliente, &cliente_len);
             buffer[bytes]= '\0';
 
             if(bytes==-1)
             {
                 std::cerr<<"[recvfrom]: " << strerror(errno) << std::endl;
-                close(sd);
                 return;
             }
 
+            //Establezco un retardo
             for(int i =0;i<5;i++)
             {
                 std::cout<<i<<std::endl;
                 sleep(1);
             }
 
+            //Informacion del host y de la direccion del cliente
             getnameinfo(&cliente, cliente_len, host, NI_MAXHOST,serv, NI_MAXSERV, NI_NUMERICHOST|NI_NUMERICSERV);
             std::cout << "[Id: " <<  std::this_thread::get_id() << "] Host: " << host << ", Port: " << serv << std::endl; 
 
@@ -55,10 +57,11 @@ public:
             time (&rawtime);
             timeinfo = localtime (&rawtime);
 
+            //Hago la accion correspondiente en funcion de los datos del cliente y se lo envio
             if(strcmp(buffer,"t")==0 || strcmp(buffer,"t\n")==0)
             {
-            int tam = strftime(buffer,TAMBUFFER-1,"%r",timeinfo) + 1;
-            int s = sendto(sd, buffer, tam, 0, &cliente, cliente_len);
+                int tam = strftime(buffer,TAMBUFFER-1,"%r",timeinfo) + 1;
+                int s = sendto(sd, buffer, tam, 0, &cliente, cliente_len);
                 if(s==-1)
                 {
                     std::cout<<"[sendto]: " << strerror(errno) << std::endl;
@@ -118,7 +121,6 @@ int main(int argc ,char *argv[])
     if(sd==-1)
     {
         std::cout << "[socket]: " << strerror(errno) << std::endl;
-        close(sd);
         return -1;
     }
 
@@ -145,12 +147,9 @@ int main(int argc ,char *argv[])
     
     //Al pulsar la q el thread principal cierra el resto de threads
     char salir = ' ';
-    while (salir!='q')
-    {
-        std::cin.get(salir);
-    }
+    std::cin.get(salir);
+    if(salir == 'q') exit(0);
     
-
     close(sd);
 
     return 0;

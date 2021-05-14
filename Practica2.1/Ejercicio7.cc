@@ -15,7 +15,7 @@ class ConexionThread
 public:
     ConexionThread(int _sd)
     {
-        cliente_sd =_sd;
+        cliente =_sd;
     } 
 
     void haz_conexion()
@@ -25,7 +25,8 @@ public:
         {
             char buffer[TAMBUFFER];
 
-            int bytes = recv(cliente_sd, (void*) buffer, TAMBUFFER-1, 0);
+            //Recibo datos del cliente
+            int bytes = recv(cliente, (void*) buffer, TAMBUFFER-1, 0);
             buffer[bytes]= '\0';
             if(bytes <=0)
             {
@@ -35,7 +36,8 @@ public:
 
             std::cout << "[Id: " <<  std::this_thread::get_id() << "] Data: " << buffer << std::endl;
 
-            int s = send(cliente_sd, buffer, bytes, 0);   
+            //Envio datos al cliente
+            int s = send(cliente, buffer, bytes, 0);   
             if(s==-1)
             {
                 std::cout << "[send]: " << strerror(errno) << std::endl;
@@ -43,12 +45,12 @@ public:
             }            
         }
 
-        close(cliente_sd);
+        close(cliente);
 
     }
 
 private:
-  int cliente_sd;
+  int cliente;
 };
 
 
@@ -82,7 +84,6 @@ int main(int argc ,char *argv[])
     //Bind
     bind(sd, res->ai_addr, res->ai_addrlen);
 
-    freeaddrinfo(res);
 
     //Espera aceptar conexiones
     listen(sd,16);
@@ -99,8 +100,6 @@ int main(int argc ,char *argv[])
         if(cliente_sd==-1)
         {
             std::cout << "[accept]: " << strerror(errno) << std::endl;
-
-            close(cliente_sd);
             return -1;
         }
 
@@ -125,6 +124,7 @@ int main(int argc ,char *argv[])
     }
 
     close(sd);
+    freeaddrinfo(res);
 
     return 0;
 }

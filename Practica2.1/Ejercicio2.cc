@@ -32,7 +32,6 @@ int main(int argc ,char *argv[])
     if(sd==-1)
     {
         std::cerr<<"[socket] creacion de socket"<<std::endl;
-        close(sd);
         return -1;
     }
 
@@ -58,7 +57,6 @@ int main(int argc ,char *argv[])
         if(bytes==-1)
         {
             std::cerr<<"[recvfrom]: " << strerror(errno) << std::endl;
-            close(sd);
             return -1;
         }
 

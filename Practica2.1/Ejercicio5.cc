@@ -62,7 +62,6 @@ int main(int argc ,char *argv[])
         if(s==-1)
         {
             std::cout << strerror(errno) << std::endl;
-            close(sd);
             return -1;
         }
 
@@ -73,7 +72,6 @@ int main(int argc ,char *argv[])
         if(bytes==-1)
         {
             std::cout << strerror(errno) << std::endl;
-            close(sd);
             return -1;
         }
      

@@ -47,6 +47,11 @@ int main(int argc ,char *argv[])
 
     //Creacion del socket del cliente
     int cliente_sd = accept(sd,&cliente,&cliente_len);
+    if(cliente_sd==-1)
+    {
+        std::cout << "[accept]: " << strerror(errno) << std::endl;
+        return -1;
+    }
 
     char host[NI_MAXHOST];
     char serv[NI_MAXSERV];
@@ -69,15 +74,11 @@ int main(int argc ,char *argv[])
             break;
         }
 
-        //std::cout << "Data: " << buffer<<std::endl;
-
         //Envio datos al cliente
         int s = send(cliente_sd, buffer, bytes, 0);   
         if(s==-1)
         {
             std::cout << "[send]: " << strerror(errno) << std::endl;
-            close(sd);
-            close(cliente_sd);
             return -1;
         }            
     }
