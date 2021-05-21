@@ -15,15 +15,14 @@ public:
     Jugador(const char * _n, int16_t _x, int16_t _y):x(_x),y(_y)
     {
         strncpy(name, _n, MAX_NAME);
+        int16_t data_size = MAX_NAME * sizeof(char) + 2 * sizeof(int16_t);
+        alloc_data(data_size);
     };
 
     virtual ~Jugador(){};
 
     void to_bin()
     {
-        int16_t data_size = MAX_NAME * sizeof(char) + 2 * sizeof(int16_t);
-        alloc_data(data_size);
-
         char* tmp = _data;
 
         memcpy(tmp,name, MAX_NAME * sizeof(char));
