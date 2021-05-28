@@ -7,8 +7,8 @@
 #include "Serializable.h"
 #include "Socket.h"
 
-#define NICK_SIZE 8
-#define MSG_SIZE 80
+#define NICK_SIZE 8 //Longitud del nick de usuario
+#define MSG_SIZE 80 //LOngitud del mensaje que se envia
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 

@@ -80,7 +80,7 @@ void ChatServer::do_messages()
                 break;
             }
             case ChatMessage::LOGOUT:{
-
+                
                 auto it = clients.begin();
                 while(it != clients.end())
                 {               
@@ -110,8 +110,7 @@ void ChatServer::do_messages()
             }
             default:
                 break;
-        }  
-        
+        }        
     }
 }
 
@@ -130,8 +129,6 @@ void ChatClient::login()
 
 void ChatClient::logout()
 {
-    // Completar
-
     std::string msg;
 
     ChatMessage em(nick, msg);
@@ -148,10 +145,19 @@ void ChatClient::input_thread()
         std::string msg;
         std::getline(std::cin,msg);
        
-        // Enviar al servidor usando socket
-        ChatMessage em(nick,msg);
-        em.type=ChatMessage::MESSAGE;
-        socket.send(em,socket);
+        // Al recibir como input la q el usuario sale del chat
+        if(strcmp(msg.c_str(),"q") == 0)
+        {
+            logout();
+            exit(0);
+        }
+        else
+        {
+            // Enviar al servidor usando socket
+            ChatMessage em(nick,msg);
+            em.type=ChatMessage::MESSAGE;
+            socket.send(em,socket);
+        }
     }
 }
 
